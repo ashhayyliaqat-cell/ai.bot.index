@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pakistan AI — an AI-powered guide to Pakistan's history, culture, cities, tourism, education, food, geography and more.">
+  <meta name="theme-color" content="#063b25">
+  <title>Pakistan AI — Your Intelligent Guide to Pakistan</title>
+  <style>
+    :root{
+      --green-950:#032719;
+      --green-900:#063b25;
+      --green-800:#075c39;
+      --green-700:#087443;
+      --green-600:#0b8b51;
+      --green-500:#10a866;
+      --green-100:#e8f7ef;
+      --green-50:#f4fbf7;
+      --white:#fff;
+      --ink:#10231b;
+      --muted:#62746c;
+      --line:#dce9e2;
+      --soft:#f7faf8;
+      --shadow:0 22px 60px rgba(4,44,28,.10);
+      --shadow-sm:0 10px 28px rgba(4,44,28,.08);
+      --radius:22px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--ink);
+      background:linear-gradient(180deg,#fbfefc 0%,#f5faf7 100%);
+      line-height:1.55;
+    }
+    button,input,textarea{font:inherit}
+    button{cursor:pointer}
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%}
+    .container{width:min(1180px,calc(100% - 40px));margin-inline:auto}
+    .topbar{
+      position:sticky;top:0;z-index:50;
+      background:rgba(255,255,255,.90);
+      backdrop-filter:blur(18px);
+      border-bottom:1px solid rgba(220,233,226,.85);
+    }
+    .nav{
+      min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:-.03em}
+    .brand-mark{
+      width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
+      background:linear-gradient(145deg,var(--green-900),var(--green-500));
+      color:#fff;box-shadow:0 8px 22px rgba(8,116,67,.24);font-size:20px;
+    }
+    .brand-copy strong{display:block;font-size:17px}
+    .brand-copy span{display:block;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.02em}
+    .nav-links{display:flex;align-items:center;gap:6px}
+    .nav-links a{padding:10px 13px;border-radius:11px;color:#486057;font-size:14px;font-weight:700}
+    .nav-links a:hover,.nav-links a.active{background:var(--green-50);color:var(--green-800)}
+    .nav-cta{
+      padding:11px 16px;border:0;border-radius:12px;background:var(--green-900);color:#fff;font-weight:800;
+      box-shadow:0 8px 18px rgba(6,59,37,.18)
+    }
+    .menu-btn{display:none;border:1px solid var(--line);background:#fff;border-radius:11px;width:42px;height:42px}
+
+    .hero{padding:78px 0 54px;overflow:hidden}
+    .hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:54px;align-items:center}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;padding:7px 11px;border:1px solid #cfe8da;
+      border-radius:999px;background:var(--green-50);color:var(--green-800);font-size:12px;font-weight:900;letter-spacing:.04em;text-transform:uppercase
+    }
+    .pulse{width:7px;height:7px;background:var(--green-500);border-radius:50%;box-shadow:0 0 0 6px rgba(16,168,102,.10)}
+    h1{font-size:clamp(48px,7vw,82px);line-height:.98;letter-spacing:-.065em;margin:20px 0 20px;max-width:760px}
+    .hero h1 span{color:var(--green-700)}
+    .hero-copy{font-size:19px;color:#53665e;max-width:650px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+    .btn{
+      border:0;border-radius:14px;padding:14px 19px;font-weight:850;display:inline-flex;align-items:center;gap:9px;
+      transition:.2s ease;min-height:48px
+    }
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{background:var(--green-900);color:#fff;box-shadow:0 12px 28px rgba(6,59,37,.18)}
+    .btn-secondary{background:#fff;border:1px solid var(--line);color:var(--green-900)}
+    .trust-row{display:flex;gap:18px;flex-wrap:wrap;margin-top:28px;color:#6b7c74;font-size:13px;font-weight:700}
+    .trust-row span{display:flex;align-items:center;gap:7px}
+    .check{color:var(--green-600);font-weight:900}
+
+    .hero-visual{position:relative;min-height:500px}
+    .hero-image{
+      position:absolute;inset:18px 0 0 50px;border-radius:30px;overflow:hidden;box-shadow:var(--shadow);
+      background:#dfeee5;
+    }
+    .hero-image img{width:100%;height:100%;object-fit:cover}
+    .hero-image:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(3,39,25,.72))}
+    .hero-caption{position:absolute;z-index:2;left:28px;right:28px;bottom:25px;color:#fff}
+    .hero-caption small{opacity:.78;font-weight:700}.hero-caption h3{font-size:25px;letter-spacing:-.03em}
+    .floating-card{
+      position:absolute;z-index:3;left:0;top:62px;width:215px;padding:17px;border-radius:18px;background:rgba(255,255,255,.94);
+      backdrop-filter:blur(14px);box-shadow:var(--shadow-sm);border:1px solid rgba(255,255,255,.7)
+    }
+    .floating-card .mini-icon{width:38px;height:38px;border-radius:12px;background:var(--green-100);display:grid;place-items:center;margin-bottom:12px}
+    .floating-card strong{display:block}.floating-card p{font-size:12px;color:var(--muted);margin-top:4px}
+
+    .section{padding:76px 0}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:28px}
+    .section-kicker{font-size:12px;color:var(--green-700);font-weight:900;text-transform:uppercase;letter-spacing:.12em}
+    .section h2{font-size:clamp(31px,4vw,48px);line-height:1.05;letter-spacing:-.05em;margin-top:8px}
+    .section-intro{max-width:560px;color:var(--muted)}
+    .ai-shell{
+      border:1px solid #cfe2d8;border-radius:28px;background:#fff;box-shadow:var(--shadow);overflow:hidden;
+      display:grid;grid-template-columns:290px 1fr;min-height:680px
+    }
+    .chat-sidebar{background:linear-gradient(180deg,#f2faf5,#eef7f2);border-right:1px solid var(--line);padding:22px}
+    .side-title{font-weight:900;font-size:14px;margin-bottom:14px}
+    .suggestions{display:grid;gap:9px}
+    .suggestion{
+      width:100%;text-align:left;border:1px solid #d7e8df;background:#fff;border-radius:13px;padding:12px 13px;
+      color:#294238;font-size:12px;line-height:1.4;font-weight:700;transition:.18s ease
+    }
+    .suggestion:hover{border-color:#a9d2bb;background:#f8fdfa;transform:translateY(-1px)}
+    .side-note{margin-top:20px;padding:13px;border-radius:14px;background:#e7f6ed;color:#4b6559;font-size:11px}
+    .chat-main{display:flex;flex-direction:column;min-width:0}
+    .chat-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:15px}
+    .ai-identity{display:flex;align-items:center;gap:11px}
+    .ai-avatar{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,var(--green-900),var(--green-500));font-size:19px}
+    .ai-identity strong{display:block;font-size:14px}.ai-identity span{font-size:11px;color:#708078}
+    .chat-actions{display:flex;gap:7px}
+    .icon-btn{
+      width:37px;height:37px;border:1px solid var(--line);background:#fff;border-radius:10px;color:#52665d;display:grid;place-items:center
+    }
+    .icon-btn:hover{background:var(--green-50);color:var(--green-800)}
+    .messages{
+      flex:1;padding:25px;overflow:auto;max-height:470px;min-height:390px;background:
+        radial-gradient(circle at 90% 0%,rgba(16,168,102,.055),transparent 28%),#fff
+    }
+    .message{display:flex;margin:0 0 18px;gap:10px;animation:messageIn .24s ease}
+    @keyframes messageIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+    .message.user{justify-content:flex-end}
+    .bubble{
+      max-width:min(78%,720px);padding:13px 15px;border-radius:17px 17px 17px 5px;background:#f1f6f3;color:#233a30;
+      white-space:pre-wrap;word-break:break-word;font-size:14px
+    }
+    .message.user .bubble{background:var(--green-900);color:#fff;border-radius:17px 17px 5px 17px}
+    .msg-avatar{flex:0 0 32px;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--green-100);color:var(--green-800);font-size:14px}
+    .message.user .msg-avatar{display:none}
+    .msg-tools{display:flex;gap:6px;margin-top:7px}
+    .tiny-action{border:0;background:transparent;color:#84948d;font-size:11px;padding:2px 0}
+    .tiny-action:hover{color:var(--green-700)}
+    .typing{display:inline-flex;gap:4px;align-items:center}
+    .typing i{width:6px;height:6px;border-radius:50%;background:#7c9489;animation:dot 1s infinite ease-in-out}
+    .typing i:nth-child(2){animation-delay:.12s}.typing i:nth-child(3){animation-delay:.24s}
+    @keyframes dot{0%,60%,100%{transform:translateY(0);opacity:.45}30%{transform:translateY(-4px);opacity:1}}
+    .composer{padding:16px 18px 18px;border-top:1px solid var(--line);background:#fff}
+    .composer-box{display:flex;align-items:flex-end;gap:9px;border:1px solid #cadfd4;border-radius:17px;padding:8px;background:#fbfefc}
+    #prompt{
+      width:100%;resize:none;outline:0;border:0;background:transparent;min-height:43px;max-height:140px;padding:9px 8px;color:var(--ink)
+    }
+    #prompt::placeholder{color:#8b9a94}
+    .send-btn{
+      width:44px;height:44px;border:0;border-radius:13px;background:var(--green-900);color:#fff;display:grid;place-items:center;flex:0 0 44px
+    }
+    .composer-meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px;color:#8a9992;font-size:10px}
+    .status{display:flex;align-items:center;gap:6px}.status-dot{width:6px;height:6px;border-radius:50%;background:#16a766}
+    .clear-link{border:0;background:transparent;color:#6f8078;font-size:10px}
+
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .region-card,.topic-card{
+      background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 8px 26px rgba(4,44,28,.045);
+      transition:.2s ease
+    }
+    .region-card:hover,.topic-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-sm)}
+    .card-image{height:190px;overflow:hidden;background:#dfece4}.card-image img{width:100%;height:100%;object-fit:cover;transition:.35s ease}.region-card:hover img,.topic-card:hover img{transform:scale(1.035)}
+    .card-body{padding:18px}.card-body h3{font-size:20px;letter-spacing:-.03em}.card-body p{color:var(--muted);font-size:13px;margin-top:7px}
+    .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.tag{font-size:10px;font-weight:800;color:var(--green-800);background:var(--green-50);padding:5px 8px;border-radius:999px}
+    .topic-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+    .topic-card{padding:17px;min-height:145px}
+    .topic-icon{width:38px;height:38px;border-radius:11px;background:var(--green-50);display:grid;place-items:center;margin-bottom:13px}
+    .topic-card h3{font-size:15px}.topic-card p{font-size:12px;color:var(--muted);margin-top:5px}
+
+    .wide-feature{display:grid;grid-template-columns:.95fr 1.05fr;gap:0;border-radius:26px;overflow:hidden;background:var(--green-950);color:#fff;box-shadow:var(--shadow)}
+    .wide-feature-image{min-height:390px}.wide-feature-image img{width:100%;height:100%;object-fit:cover}
+    .wide-feature-copy{padding:45px}.wide-feature-copy .section-kicker{color:#8fe4b8}.wide-feature-copy h2{margin-top:9px}.wide-feature-copy p{color:#bfd2c8;margin-top:16px}
+    .feature-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:23px}.feature-list div{padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:13px;background:rgba(255,255,255,.04);font-size:12px;color:#d9e9e1}
+
+    .food-row{display:flex;flex-wrap:wrap;gap:10px}.food-pill{padding:11px 14px;border:1px solid var(--line);background:#fff;border-radius:999px;font-size:13px;font-weight:750;color:#365046}
+    .history-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.history-item{padding:18px;border-left:3px solid var(--green-500);background:#fff;border-radius:0 16px 16px 0;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.history-item strong{display:block}.history-item span{font-size:12px;color:var(--muted)}
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.about-card{padding:25px;background:#fff;border:1px solid var(--line);border-radius:20px}.about-card h3{margin-bottom:7px}.about-card p{font-size:13px;color:var(--muted)}
+
+    footer{background:var(--green-950);color:#c7d9d0;margin-top:30px}.footer-inner{padding:34px 0;display:flex;justify-content:space-between;gap:20px;align-items:center}.footer-brand{font-weight:900;color:#fff}.footer-small{font-size:11px;color:#8da89b}
+    .mobile-menu{display:none;padding:10px 20px 17px;border-top:1px solid var(--line);background:#fff}.mobile-menu a{display:block;padding:11px 0;color:#496057;font-weight:750;font-size:14px}
+
+    .toast{position:fixed;right:18px;bottom:18px;z-index:100;padding:12px 15px;border-radius:13px;background:var(--green-950);color:#fff;font-size:12px;box-shadow:var(--shadow-sm);opacity:0;transform:translateY(10px);pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:none}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+    @media (max-width:980px){
+      .nav-links{display:none}.nav-cta{display:none}.menu-btn{display:block}
+      .mobile-menu.open{display:block}
+      .hero-grid{grid-template-columns:1fr}.hero-visual{min-height:430px;max-width:760px}.hero-image{inset:15px 0 0 45px}
+      .ai-shell{grid-template-columns:1fr}.chat-sidebar{border-right:0;border-bottom:1px solid var(--line);padding:17px}.suggestions{grid-template-columns:repeat(2,1fr)}.side-note{display:none}
+      .cards{grid-template-columns:1fr 1fr}.topic-grid{grid-template-columns:1fr 1fr}
+      .wide-feature{grid-template-columns:1fr}.wide-feature-image{min-height:300px}.wide-feature-copy{padding:32px}
+    }
+    @media (max-width:650px){
+      .container{width:min(100% - 26px,1180px)}.hero{padding-top:50px}.hero-visual{min-height:340px}.hero-image{inset:12px 0 0 22px;border-radius:22px}.floating-card{top:30px;width:175px;padding:13px}.hero-caption{left:18px;right:18px;bottom:17px}.hero-caption h3{font-size:19px}
+      .hero-copy{font-size:16px}.trust-row{gap:10px;display:grid}
+      .section{padding:55px 0}.section-head{display:block}.section-intro{margin-top:12px}
+      .suggestions{grid-template-columns:1fr}.messages{padding:18px;min-height:420px;max-height:56vh}.bubble{max-width:88%;font-size:13px}
+      .chat-head{padding:14px}.composer{padding:12px}.composer-meta{font-size:9px}
+      .cards,.history-grid,.about-grid{grid-template-columns:1fr}.topic-grid{grid-template-columns:1fr 1fr}
+      .feature-list{grid-template-columns:1fr}.wide-feature-image{min-height:230px}
+      .footer-inner{display:block}.footer-small{margin-top:7px}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav container" aria-label="Primary navigation">
+      <a class="brand" href="#home" aria-label="Pakistan AI home">
+        <span class="brand-mark">🇵🇰</span>
+        <span class="brand-copy"><strong>PAKISTAN AI</strong><span>Your Intelligent Guide to Pakistan</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="#home" class="active">Home</a>
+        <a href="#chat">AI Chat</a>
+        <a href="#explore">Explore Pakistan</a>
+        <a href="#about">About</a>
+      </div>
+      <button class="nav-cta" onclick="document.getElementById('chat').scrollIntoView({behavior:'smooth'})">Start Chat</button>
+      <button class="menu-btn" id="menuBtn" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#home">Home</a><a href="#chat">AI Chat</a><a href="#explore">Explore Pakistan</a><a href="#about">About</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow"><span class="pulse"></span> Pakistan-focused intelligence</span>
+          <h1>Ask <span>Pakistan</span> anything.</h1>
+          <p class="hero-copy">An AI-powered guide to Pakistan's history, culture, cities, tourism, education, food, geography, defence, science and more — designed to answer the question you actually asked.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="document.getElementById('chat').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('prompt').focus(),450)">Start Chatting <span>→</span></button>
+            <a class="btn btn-secondary" href="#explore">Explore Pakistan</a>
+          </div>
+          <div class="trust-row">
+            <span><b class="check">✓</b> English + Urdu + Roman Urdu</span>
+            <span><b class="check">✓</b> Conversation memory</span>
+            <span><b class="check">✓</b> Optional live web grounding</span>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="Pakistan landscape image">
+          <div class="floating-card">
+            <div class="mini-icon">✦</div>
+            <strong>One question at a time.</strong>
+            <p>Direct answers first. Context only when it helps.</p>
+          </div>
+          <div class="hero-image">
+            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Mountains_of_Hunza_valley.JPG?width=1400" alt="Mountains in Hunza Valley, Pakistan">
+            <div class="hero-caption"><small>Gilgit-Baltistan · Pakistan</small><h3>From ancient heritage to the high mountains.</h3></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="chat">
+      <div class="container">
+        <div class="section-head">
+          <div><div class="section-kicker">The main experience</div><h2>Meet Pakistan AI.</h2></div>
+          <p class="section-intro">Ask naturally. The assistant keeps recent conversation context, follows your language, and can use Google Search grounding when current information needs verification.</p>
+        </div>
+
+        <div class="ai-shell">
+          <aside class="chat-sidebar" aria-label="Suggested questions">
+            <div class="side-title">Try a question</div>
+            <div class="suggestions">
+              <button class="suggestion">Who is the President of Pakistan?</button>
+              <button class="suggestion">Tell me about Lahore Fort.</button>
+              <button class="suggestion">What are the most beautiful places in Pakistan?</button>
+              <button class="suggestion">What is Pakistan famous for?</button>
+              <button class="suggestion">Tell me about Pakistani food.</button>
+              <button class="suggestion">What are the best tourist places in Gilgit-Baltistan?</button>
+              <button class="suggestion">Tell me about Pakistan's education system.</button>
+              <button class="suggestion">How was Pakistan created?</button>
+              <button class="suggestion">Tell me about Pakistan's defence.</button>
+              <button class="suggestion">Which cities should tourists visit?</button>
+            </div>
+            <div class="side-note"><strong>Accuracy rule</strong><br>Specific question → specific answer. For changing facts, the assistant is instructed to distinguish verified current information from historical or uncertain information.</div>
+          </aside>
+
+          <section class="chat-main" aria-label="Pakistan AI chat">
+            <div class="chat-head">
+              <div class="ai-identity">
+                <div class="ai-avatar">✦</div>
+                <div><strong>Pakistan AI</strong><span>Ready to answer about Pakistan</span></div>
+              </div>
+              <div class="chat-actions">
+                <button class="icon-btn" id="clearChat" title="Clear conversation" aria-label="Clear conversation">⌫</button>
+              </div>
+            </div>
+
+            <div class="messages" id="messages" aria-live="polite"></div>
+
+            <div class="composer">
+              <label class="sr-only" for="prompt">Ask Pakistan AI a question</label>
+              <div class="composer-box">
+                <textarea id="prompt" rows="1" maxlength="4000" placeholder="Ask anything about Pakistan…" aria-label="Ask Pakistan AI"></textarea>
+                <button class="send-btn" id="sendBtn" aria-label="Send message" title="Send">➤</button>
+              </div>
+              <div class="composer-meta">
+                <span class="status"><span class="status-dot"></span> Gemini-powered</span>
+                <button class="clear-link" id="clearChatBottom">Clear chat</button>
+                <span>Enter to send · Shift+Enter for new line</span>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="explore">
+      <div class="container">
+        <div class="section-head">
+          <div><div class="section-kicker">Explore Pakistan</div><h2>Seven regions. One country.</h2></div>
+          <p class="section-intro">A visual starting point for exploring Pakistan. Use the AI above when you want a deeper, specific answer.</p>
+        </div>
+        <div class="cards">
+          <article class="region-card">
+            <div class="card-image"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lahore_Fort_pakistan.jpg?width=1200" alt="Lahore Fort in Punjab"></div>
+            <div class="card-body"><h3>Punjab</h3><p>Known for historic cities, Mughal heritage, agriculture, literature and rich Punjabi culture.</p><div class="tags"><span class="tag">Lahore</span><span class="tag">Multan</span><span class="tag">Fortresses</span><span class="tag">Food</span></div></div>
+          </article>
+          <article class="region-card">
+            <div class="card-image"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Mohenjo_daro00.jpg?width=1200" alt="Mohenjo-daro archaeological site in Sindh"></div>
+            <div class="card-body"><h3>Sindh</h3><p>Home to ancient archaeological heritage, the Indus landscape, Karachi and distinctive Sindhi traditions.</p><div class="tags"><span class="tag">Karachi</span><span class="tag">Mohenjo-daro</span><span class="tag">Thatta</span></div></div>
+          </article>
+          <article class="region-card">
+            <div class="card-image"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Mountains_of_Hunza_valley.JPG?width=1200" alt="Hunza Valley mountains in northern Pakistan"></div>
+            <div class="card-body"><h3>Khyber Pakhtunkhwa</h3><p>Mountain valleys, Pashtun culture, historic routes and dramatic landscapes define much of the province.</p><div class="tags"><span class="tag">Peshawar</span><span class="tag">Swat</span><span class="tag">Chitral</span></div></div>
+          </article>
+          <article class="region-card">
+            <div class="card-image"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Mountains_of_Hunza_valley.JPG?width=1200" alt="Mountain landscape representing northern Pakistan"></div>
+            <div class="card-body"><h3>Balochistan</h3><p>Pakistan's largest province by area, with rugged mountains, coastlines, deserts and distinctive Balochi culture.</p><div class="tags"><span class="tag">Quetta</span><span class="tag">Gwadar</span><span class="tag">Makran</span></div></div>
+          </article>
+          <article class="region-card">
+            <div class="card-image"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Faisal_Mosque%2C_Islamabad.jpg?width=1200" alt="Faisal Mosque in Islamabad"></div>
+            <div class="card-body"><h3>Islamabad</h3><p>The federal capital, known for planned avenues, Margalla Hills, museums and Faisal Mosque.</p><div class="tags"><span class="tag">Capital</span><span class="tag">Margalla Hills</span><span class="tag">Museums</span></div></div>
+          </article>
+          <article class="region-card">
+            <div class="card-image"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Mountains_of_Hunza_valley.JPG?width=1200" alt="Hunza Valley in Gilgit-Baltistan"></div>
+            <div class="card-body"><h3>Gilgit-Baltistan</h3><p>High mountain valleys, glaciers, lakes and some of the world's most dramatic peaks.</p><div class="tags"><span class="tag">Hunza</span><span class="tag">Skardu</span><span class="tag">Karakoram</span></div></div>
+          </article>
+          <article class="region-card">
+            <div class="card-image"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Mountains_of_Hunza_valley.JPG?width=1200" alt="Mountain scenery representing Azad Jammu and Kashmir"></div>
+            <div class="card-body"><h3>Azad Jammu & Kashmir</h3><p>Green valleys, rivers, mountain scenery and a strong regional cultural identity.</p><div class="tags"><span class="tag">Muzaffarabad</span><span class="tag">Neelum</span><span class="tag">Valleys</span></div></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tourism">
+      <div class="container">
+        <div class="section-head"><div><div class="section-kicker">Tourism</div><h2>Explore by interest.</h2></div><p class="section-intro">Ask the AI for a city, route, season, budget or category and let it narrow the answer to what you need.</p></div>
+        <div class="topic-grid">
+          <article class="topic-card"><div class="topic-icon">🏛️</div><h3>Historical Places</h3><p>Lahore Fort, Rohtas Fort, Taxila and more.</p></article>
+          <article class="topic-card"><div class="topic-icon">🏔️</div><h3>Mountains</h3><p>Karakoram, Himalaya and Hindu Kush landscapes.</p></article>
+          <article class="topic-card"><div class="topic-icon">💧</div><h3>Lakes</h3><p>From alpine lakes to major reservoirs.</p></article>
+          <article class="topic-card"><div class="topic-icon">🌊</div><h3>Dams</h3><p>Major water and energy infrastructure.</p></article>
+          <article class="topic-card"><div class="topic-icon">🏖️</div><h3>Beaches</h3><p>Arabian Sea coastline and coastal destinations.</p></article>
+          <article class="topic-card"><div class="topic-icon">🌲</div><h3>National Parks</h3><p>Protected landscapes and wildlife areas.</p></article>
+          <article class="topic-card"><div class="topic-icon">🏺</div><h3>Museums</h3><p>Archaeology, art, history and culture.</p></article>
+          <article class="topic-card"><div class="topic-icon">🕌</div><h3>Mosques</h3><p>Historic, traditional and modern architecture.</p></article>
+          <article class="topic-card"><div class="topic-icon">🏰</div><h3>Forts</h3><p>Citadels and defensive heritage across Pakistan.</p></article>
+          <article class="topic-card"><div class="topic-icon">🗿</div><h3>Archaeological Sites</h3><p>Indus Valley, Gandhara and later heritage.</p></article>
+          <article class="topic-card"><div class="topic-icon">🏨</div><h3>Hotels & Resorts</h3><p>Ask for options by destination and budget.</p></article>
+          <article class="topic-card"><div class="topic-icon">🍛</div><h3>Food</h3><p>Regional dishes, street food and traditions.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="wide-feature">
+          <div class="wide-feature-image"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lahore_Fort_pakistan.jpg?width=1400" alt="Lahore Fort, a major historic landmark in Pakistan"></div>
+          <div class="wide-feature-copy">
+            <div class="section-kicker">History & Heritage</div>
+            <h2>Thousands of years of stories.</h2>
+            <p>Pakistan's story reaches from the Indus Valley Civilization and Gandhara to Muslim rule, British India, the Pakistan Movement and the creation of Pakistan in 1947.</p>
+            <div class="feature-list">
+              <div>Indus Valley Civilization</div><div>Mohenjo-daro & Harappa</div>
+              <div>Gandhara Civilization</div><div>Muslim rule</div>
+              <div>British India</div><div>Pakistan Movement</div>
+              <div>Allama Iqbal</div><div>Quaid-e-Azam</div>
+              <div>14 August 1947</div><div>Constitution of Pakistan</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="food">
+      <div class="container">
+        <div class="section-head"><div><div class="section-kicker">Pakistani Food</div><h2>Ask about the dish, not just the country.</h2></div><p class="section-intro">The AI is instructed not to invent origins. If a dish has a disputed or regional history, it should say so.</p></div>
+        <div class="food-row">
+          <span class="food-pill">Biryani</span><span class="food-pill">Nihari</span><span class="food-pill">Haleem</span><span class="food-pill">Karahi</span><span class="food-pill">Chapli Kebab</span><span class="food-pill">Seekh Kebab</span><span class="food-pill">Sajji</span><span class="food-pill">Pulao</span><span class="food-pill">Saag</span><span class="food-pill">Makki di Roti</span><span class="food-pill">Gol Gappay</span><span class="food-pill">Samosa</span><span class="food-pill">Pakoras</span><span class="food-pill">Kheer</span><span class="food-pill">Gulab Jamun</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="education">
+      <div class="container">
+        <div class="section-head"><div><div class="section-kicker">Education & Innovation</div><h2>Learn, build, discover.</h2></div><p class="section-intro">Use Pakistan AI to explore schools, colleges, universities, scholarships, STEM, digital education and government education initiatives.</p></div>
+        <div class="cards">
+          <article class="topic-card"><div class="topic-icon">🎓</div><h3>Schools</h3><p>School systems, curricula, admissions and education pathways.</p></article>
+          <article class="topic-card"><div class="topic-icon">🏫</div><h3>Colleges</h3><p>Intermediate education, subjects and study options.</p></article>
+          <article class="topic-card"><div class="topic-icon">🏛️</div><h3>Universities</h3><p>Pakistani higher education and academic fields.</p></article>
+          <article class="topic-card"><div class="topic-icon">💡</div><h3>STEM & Technology</h3><p>Science, computing, AI and technology in Pakistan.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="defence">
+      <div class="container">
+        <div class="section-head"><div><div class="section-kicker">Defence</div><h2>Professional, educational context.</h2></div><p class="section-intro">Pakistan AI can explain the roles, history and general structure of the Pakistan Army, Pakistan Navy and Pakistan Air Force without providing sensitive operational information.</p></div>
+        <div class="about-grid">
+          <div class="about-card"><h3>Pakistan Army</h3><p>General information about its history, role in national defence, organization at a high level and notable historical milestones.</p></div>
+          <div class="about-card"><h3>Pakistan Navy</h3><p>General information about maritime defence, naval history, bases at a high level and its role in protecting Pakistan's maritime interests.</p></div>
+          <div class="about-card"><h3>Pakistan Air Force</h3><p>General information about air defence, history, aircraft development and major historical milestones.</p></div>
+          <div class="about-card"><h3>Safety boundary</h3><p>The assistant should not provide sensitive operational, targeting, tactical or other information that could create security risks.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="today">
+      <div class="container">
+        <div class="section-head"><div><div class="section-kicker">Pakistan Today</div><h2>Current information, handled carefully.</h2></div><p class="section-intro">This area intentionally avoids hardcoded “current” political facts. When enabled, Gemini can use Google Search grounding for time-sensitive questions.</p></div>
+        <div class="history-grid">
+          <div class="history-item"><strong>Government & Politics</strong><span>Current office holders, political developments and government information.</span></div>
+          <div class="history-item"><strong>Current Sports</strong><span>Recent cricket and other Pakistan-related sporting information.</span></div>
+          <div class="history-item"><strong>Government Schemes</strong><span>Programs and initiatives that may change over time.</span></div>
+          <div class="history-item"><strong>Current Statistics</strong><span>Economy, population, rankings and other changing figures.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container">
+        <div class="section-head"><div><div class="section-kicker">About Pakistan AI</div><h2>Built around one idea.</h2></div><p class="section-intro">The AI is the primary feature. The rest of the website simply gives visitors a visual, structured way to discover Pakistan.</p></div>
+        <div class="about-grid">
+          <div class="about-card"><h3>Direct answers</h3><p>The system prompt tells Gemini to answer the user's exact question first instead of dumping a generic paragraph about Pakistan.</p></div>
+          <div class="about-card"><h3>Multilingual</h3><p>Questions can be asked in English, Urdu, Roman Urdu or mixed Urdu-English, with the response matching the user's language.</p></div>
+          <div class="about-card"><h3>Conversation memory</h3><p>Recent turns are sent with each request so follow-up words such as “its”, “there” or “he” can be interpreted in context.</p></div>
+          <div class="about-card"><h3>Secure by design</h3><p>The browser never receives the Gemini API key. The key exists only as a Netlify Function environment variable.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div><div class="footer-brand">🇵🇰 PAKISTAN AI</div><div class="footer-small">Your Intelligent Guide to Pakistan</div></div>
+      <div class="footer-small">AI answers are generated by Gemini. Verify important current information when decisions depend on it.</div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const ENDPOINT = "/.netlify/functions/gemini";
+    const MAX_HISTORY = 20;
+    let history = [];
+    let isSending = false;
+    let speaking = false;
+
+    const messagesEl = document.getElementById("messages");
+    const promptEl = document.getElementById("prompt");
+    const sendBtn = document.getElementById("sendBtn");
+    const toastEl = document.getElementById("toast");
+
+    function showToast(text){
+      toastEl.textContent = text;
+      toastEl.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toastEl.classList.remove("show"), 2600);
+    }
+
+    function addMessage(role, text, options = {}){
+      const row = document.createElement("div");
+      row.className = "message " + role;
+      if(role === "ai"){
+        const avatar = document.createElement("div");
+        avatar.className = "msg-avatar";
+        avatar.textContent = "✦";
+        row.appendChild(avatar);
+      }
+
+      const wrap = document.createElement("div");
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+
+      if(options.typing){
+        bubble.innerHTML = '<span class="typing" aria-label="Pakistan AI is typing"><i></i><i></i><i></i></span>';
+      }else{
+        bubble.textContent = text;
+      }
+
+      wrap.appendChild(bubble);
+
+      if(role === "ai" && !options.typing){
+        const tools = document.createElement("div");
+        tools.className = "msg-tools";
+
+        const copy = document.createElement("button");
+        copy.className = "tiny-action";
+        copy.textContent = "Copy";
+        copy.addEventListener("click", async () => {
+          try{
+            await navigator.clipboard.writeText(text);
+            showToast("Answer copied.");
+          }catch{
+            showToast("Copy is not available in this browser.");
+          }
+        });
+
+        const listen = document.createElement("button");
+        listen.className = "tiny-action";
+        listen.textContent = "Listen";
+        listen.addEventListener("click", () => speak(text));
+
+        const stop = document.createElement("button");
+        stop.className = "tiny-action";
+        stop.textContent = "Stop";
+        stop.addEventListener("click", stopSpeaking);
+
+        tools.append(copy, listen, stop);
+        wrap.appendChild(tools);
+      }
+
+      row.appendChild(wrap);
+      messagesEl.appendChild(row);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      return row;
+    }
+
+    function showWelcome(){
+      messagesEl.innerHTML = "";
+      addMessage("ai", "Assalam-o-Alaikum! I'm Pakistan AI. Ask me anything about Pakistan.");
+    }
+
+    function setTyping(){
+      return addMessage("ai", "", {typing:true});
+    }
+
+    function resizeInput(){
+      promptEl.style.height = "auto";
+      promptEl.style.height = Math.min(promptEl.scrollHeight, 140) + "px";
+    }
+
+    function sanitizeHistory(){
+      return history.slice(-MAX_HISTORY).map(item => ({
+        role: item.role === "model" ? "model" : "user",
+        text: String(item.text || "").slice(0, 4000)
+      }));
+    }
+
+    async function sendMessage(forcedText = null){
+      if(isSending) return;
+      const text = String(forcedText ?? promptEl.value).trim();
+      if(!text) return;
+
+      isSending = true;
+      sendBtn.disabled = true;
+      promptEl.disabled = true;
+
+      addMessage("user", text);
+      history.push({role:"user", text});
+      promptEl.value = "";
+      resizeInput();
+
+      const typingRow = setTyping();
+
+      try{
+        const response = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify({
+            question: text,
+            history: sanitizeHistory()
+          })
+        });
+
+        const data = await response.json().catch(() => ({}));
+        typingRow.remove();
+
+        if(!response.ok || !data.answer){
+          throw new Error(data.error || "The AI function did not return an answer.");
+        }
+
+        addMessage("ai", data.answer);
+        history.push({role:"model", text:data.answer});
+        history = history.slice(-MAX_HISTORY);
+      }catch(error){
+        typingRow.remove();
+        addMessage("ai", "Pakistan AI is temporarily unavailable. Please try again.");
+        showToast("Could not reach Pakistan AI.");
+        console.error(error);
+      }finally{
+        isSending = false;
+        sendBtn.disabled = false;
+        promptEl.disabled = false;
+        promptEl.focus();
+      }
+    }
+
+    function clearChat(){
+      history = [];
+      stopSpeaking();
+      showWelcome();
+      showToast("Conversation cleared.");
+      promptEl.focus();
+    }
+
+    function speak(text){
+      if(!("speechSynthesis" in window)){
+        showToast("Text-to-speech is not supported here.");
+        return;
+      }
+      stopSpeaking();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = /[\u0600-\u06FF]/.test(text) ? "ur-PK" : "en-US";
+      utterance.rate = 0.98;
+      utterance.onstart = () => { speaking = true; };
+      utterance.onend = () => { speaking = false; };
+      speechSynthesis.speak(utterance);
+    }
+
+    function stopSpeaking(){
+      if("speechSynthesis" in window) speechSynthesis.cancel();
+      speaking = false;
+    }
+
+    document.querySelectorAll(".suggestion").forEach(button => {
+      button.addEventListener("click", () => sendMessage(button.textContent.trim()));
+    });
+
+    sendBtn.addEventListener("click", () => sendMessage());
+
+    promptEl.addEventListener("input", resizeInput);
+    promptEl.addEventListener("keydown", event => {
+      if(event.key === "Enter" && !event.shiftKey){
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+
+    document.getElementById("clearChat").addEventListener("click", clearChat);
+    document.getElementById("clearChatBottom").addEventListener("click", clearChat);
+
+    const menuBtn = document.getElementById("menuBtn");
+    const mobileMenu = document.getElementById("mobileMenu");
+    menuBtn.addEventListener("click", () => {
+      const open = mobileMenu.classList.toggle("open");
+      menuBtn.setAttribute("aria-expanded", String(open));
+    });
+    mobileMenu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => {
+      mobileMenu.classList.remove("open");
+      menuBtn.setAttribute("aria-expanded","false");
+    }));
+
+    showWelcome();
+    resizeInput();
+  </script>
+</body>
+</html>
